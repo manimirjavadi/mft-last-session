@@ -6,6 +6,73 @@
 }
 
 body {
-  background-color: #1a1a1a;
-  color: #fff;
+  color: #1e1e1e;
+}
+
+.cart-container {
+  padding: 24px 16px;
+}
+
+.heading {
+  h3 {
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  span {
+    font-size: 14px;
+  }
+}
+
+.foods-container {
+  margin-top: 29px;
+
+  .food-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(181, 181, 181, 1);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(181, 181, 181, 1);
+    box-shadow: 0px 0px 10px 0px rgba(181, 181, 181, 1);
+    border-radius: 15px;
+  }
+
+  .food-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    img {
+      width: 140px;
+      height: 140px;
+    }
+
+    .food-descriptions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+
+  .food-qty {
+    display: flex;
+    gap: 4px;
+
+    .qty {
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .buttons-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .price {
+      margin-left: 32px;
+      font-size: 18px;
+    }
+  }
 }
