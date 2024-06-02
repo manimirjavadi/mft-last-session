@@ -30,75 +30,99 @@ const foods = [
   },
 ];
 
-const renderFoodCards = (food) => {
-  const foodContainer = document.querySelector(".foods-container");
-  const html = `
-        <div class="food-card">
-          <div class="food-title">
-            <img
-              alt="${food.title}"
-              src="${food.img}"
-              class="food-img"
-            />
-            <div class="description">
-              <h4>${food.title}</h4>
-              <span>${food.description}</span>
-            </div>
-          </div>
-          <div class="food-qty">
-            <span class="qty">${food.qty}</span>
-            <div class="buttons-container">
-              <a class="up-arrow" data-pizza="${food.id}">
-                <img alt="up-arrow" src="${arrowUp}" />
-              </a>
-              <a class="down-arrow" data-pizza="${food.id}">
-                <img alt="down-arrow" src="${arrowDown}" />
-              </a>
-            </div>
-            <span class="price">${food.price}</span>
-          </div>
-        </div>
-  `;
-  foodContainer.insertAdjacentHTML("beforeend", html);
-
-  const upArrows = document.querySelectorAll(".up-arrow");
-  const downArrows = document.querySelectorAll(".down-arrow");
-
-  upArrows.forEach((upArrow) =>
-    upArrow.addEventListener("click", function () {
-      const id = this.dataset.pizza;
-      const thePizza = foods.find((food) => food.id == id);
-      if (thePizza) {
-        thePizza.qty++;
-      }
-      const pizzaIndex = foods.findIndex((food) => food.id == id);
-      const updatedFoodsSplice = [...foods];
-      updatedFoodsSplice.splice(pizzaIndex, 1, thePizza);
-
-      generateFoods(updatedFoodsSplice);
-    })
-  );
-
-  downArrows.forEach((downArrow) =>
-    downArrow.addEventListener("click", function () {
-      const id = this.dataset.pizza;
-      const thePizza = foods.find((food) => food.id == id);
-      if (thePizza && thePizza.qty > 1) {
-        thePizza.qty--;
-      }
-      const pizzaIndex = foods.findIndex((food) => food.id == id);
-      const updatedFoodsSplice = [...foods];
-      updatedFoodsSplice.splice(pizzaIndex, 1, thePizza);
-
-      generateFoods(updatedFoodsSplice);
-    })
-  );
-};
-
-const generateFoods = (foods) => {
+const renderFoodCards = () => {
   const foodContainer = document.querySelector(".foods-container");
   foodContainer.innerHTML = "";
-  foods.forEach((food) => renderFoodCards(food));
+
+  foods.forEach((food) => {
+    // Creating food card
+    const card = document.createElement("div");
+    card.className = "food-card";
+
+    // Creating food title
+    const foodTitle = document.createElement("div");
+    foodTitle.className = "food-title";
+
+    // Creating img
+    const img = document.createElement("img");
+    img.setAttribute("alt", food.title);
+    img.setAttribute("src", food.img);
+    img.className = "food-img";
+
+    // Creating description
+    const description = document.createElement("div");
+    description.className = "description";
+    // Creating description's title
+    const title = document.createElement("h4");
+    title.textContent = food.title;
+    // Creating description's subtitle
+    const subtitle = document.createElement("span");
+    subtitle.textContent = food.description;
+
+    // Creating food quantity section
+    const foodQty = document.createElement("div");
+    foodQty.className = "food-qty";
+
+    const qty = document.createElement("span");
+    qty.className = "qty";
+    qty.innerText = food.qty;
+    qty.id = `quantity-${food.id}`;
+
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.className = "buttons-container";
+
+    const buttonUp = document.createElement("a");
+    buttonUp.className = "up-arrow";
+    const imgUp = document.createElement("img");
+    imgUp.setAttribute("alt", "up-arrow");
+    imgUp.setAttribute("src", arrowUp);
+    buttonUp.addEventListener("click", function () {
+      updateQuantity(food.id, 1);
+    });
+
+    const buttonDown = document.createElement("a");
+    buttonDown.className = "down-arrow";
+    buttonDown.addEventListener("click", function () {
+      updateQuantity(food.id, -1);
+    });
+    const imgDown = document.createElement("img");
+    imgDown.setAttribute("alt", "down-arrow");
+    imgDown.setAttribute("src", arrowDown);
+
+    const price = document.createElement("span");
+    price.innerText = food.price;
+    price.className = "price";
+
+    // Appending children for HTML tags
+    card.appendChild(foodTitle);
+    foodTitle.appendChild(img);
+    foodTitle.appendChild(description);
+    description.appendChild(title);
+    description.appendChild(subtitle);
+
+    foodQty.appendChild(qty);
+    foodQty.appendChild(buttonsContainer);
+    foodQty.appendChild(price);
+    buttonUp.appendChild(imgUp);
+    buttonDown.appendChild(imgDown);
+    buttonsContainer.appendChild(buttonUp);
+    buttonsContainer.appendChild(buttonDown);
+
+    card.appendChild(foodQty);
+
+    foodContainer.appendChild(card);
+  });
 };
 
-generateFoods(foods);
+const updateQuantity = (productId, change) => {
+  const food = foods.find((f) => f.id == productId);
+  if (food) {
+    food.qty += change;
+    if (food.qty < 0) {
+      food.qty = 0;
+    }
+    document.getElementById(`quantity-${productId}`).textContent = food.qty;
+  }
+};
+
+renderFoodCards();
